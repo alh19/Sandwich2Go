@@ -1,0 +1,100 @@
+﻿@* model storing which data will be rendered by the View *@
+@model Sandwich2Go.Models.SandwichViewModels.SelectSandwichesViewModel
+
+@{
+    ViewData["Title"] = "Comprar sándwiches";
+}
+<br />
+<h2>Selecciona tus sándwiches</h2>
+<br />
+@* Form to fill in the filters to be used *@
+<form asp-controller="Sandwiches" class="form-horizontal">
+    <p>
+        <div>
+            <label asp-for="sandwichPrecio"></label>
+            <input id="filterByPrecio" asp-for="sandwichPrecio" size="5" />
+            <span asp-validation-for="sandwichPrecio" class="text-danger"></span>
+            <br />
+            <label asp-for="sandwichAlergenoSelected"></label>
+            <select asp-for="sandwichAlergenoSelected" asp-items="Model.Alergenos">
+                <option value="">Selecciona un alérgeno</option>
+            </select>
+            <br />
+            <br />
+            <input id="filterButton" asp-action="SelectSandwichForPurchase" type="submit" value="Filtrar" formmethod="get" />
+        </div>
+    </p>
+
+    <div id="ModelErrors" asp-validation-summary="All" class="text-danger">@TempData["Error"]</div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Oferta
+                </th>
+                <th>
+                    Precio
+                </th>
+                <th>
+                    Ingredientes
+                </th>
+                <th>
+                    Alérgenos
+                </th>
+                <th align="center" width="10%">
+                    Seleccionar Sándwich
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Sandwiches.Count() == 0)
+            {
+                <tr><td id="NoSandwiches" colspan="3">No hay sándwiches disponibles</td></tr>
+            }
+            else
+            {
+                @foreach (var item in Model.Sandwiches)
+                {
+                    <tr id="Sandwich_Name_@item.SandwichName">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SandwichName)
+                        </td>
+                        <td>
+                            @if (item.hayOferta)
+                            {
+                                @Html.DisplayFor(modelItem => item.oferta)
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Precio)
+                        </td>
+                        <td>
+                            @foreach (string ing in item.ingredientes)
+                            {
+                                @Html.DisplayFor(modelItem => ing)
+                            }
+                        </td>
+                        <td>
+                            @foreach (string ale in item.alergenos)
+                            {
+                                @Html.DisplayFor(modelItem => ale)
+                            }
+                        </td>
+                        <td align="center" width="5%">
+                            <input type="checkbox" name="IdsToAdd" id="Sandwich_@item.SandwichName" value="@item.SandwichID" class="form-control">
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <form asp-action="SelectSandwichesForPurchase" method="post">
+
+        <button id="Seleccionar" type="submit" class="btn btn-primary">Seleccionar</button>
+        <a asp-action="Index" class="btn btn-default">Cancelar</a>
+    </form>
+</form>

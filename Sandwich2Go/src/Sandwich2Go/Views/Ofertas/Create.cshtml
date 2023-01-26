@@ -1,0 +1,156 @@
+﻿@model Sandwich2Go.Models.OfertaViewModels.OfertaCreateViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="form-horizontal">
+        <h4>Oferta</h4>
+        <hr />
+        <div class="container">
+            <div class="row">
+                <div class="col-0 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </div>
+                <div class="col-8">
+                    @Html.DisplayFor(model => model.Nombre)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-0 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Apellido)
+                </div>
+                <div class="col-8">
+                    @Html.DisplayFor(model => model.Apellido)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-0 font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Email)
+                </div>
+                <div class="col-8">
+                    @Html.DisplayFor(model => model.Email)
+                </div>
+
+            </div>
+        </div>
+
+        <p>
+            <div>
+                <label asp-for="NombreOferta"></label>
+                <input asp-for="NombreOferta" size="30"/>
+                <span asp-validation-for="NombreOferta" class="text-danger"></span>
+            </div>
+        </p>
+        <p>
+            <div>
+                <label asp-for="FechaInicio"></label>
+                <input asp-for="FechaInicio" size="10" id="FechaInicio"/>
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+            </div>
+        </p>
+        <p>
+            <div>
+                <label asp-for="FechaFin"></label>
+                <input asp-for="FechaFin" size="10" id ="FechaFin"/>
+                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            </div>
+        </p>
+        <p>
+            <div>
+                <label asp-for="Descripcion"></label>
+                <input asp-for="Descripcion" size="120" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+        </p>
+
+        <input asp-for="GerenteId" type="hidden" class="form-control" />
+
+        <div id="ModelErrors" asp-validation-summary="ModelOnly" class="text-danger">
+        </div>
+        <span class="col-md-10">
+            <span asp-validation-for="OfertaSandwiches" class="text-danger"></span>
+        </span>
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th width="30%">
+                        Nombre
+                    </th>
+                    <th width="20%">
+                        Precio
+                    </th>
+                    <th width="50%">
+                        Ingredientes
+                    </th>
+                    <th>
+                        Porcentaje
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.OfertaSandwiches.Count() == 0)
+                {
+                    <tr><td colspan="3">There are no sandwiches available</td></tr>
+                }
+                else
+                {
+                    @for (int i = 0; i < Model.OfertaSandwiches.Count; i++)
+                    {
+                        <tr>
+                            <td width="30%">
+                                @Html.DisplayFor(modelItem => Model.OfertaSandwiches[i].Nombre)
+                            </td>
+                            <td width="20%">
+                                @Html.DisplayFor(modelItem => Model.OfertaSandwiches[i].Precio)
+                            </td>
+                            <td width="50%">
+                                <div class="form-group">
+                                    @Html.DisplayFor(modelItem => Model.OfertaSandwiches[i].IngM)
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input asp-for="OfertaSandwiches[i].SandwichID" type="hidden" class="form-control" />
+                                    <input asp-for="OfertaSandwiches[i].Precio" type="hidden" class="form-control" />
+                                    <input asp-for="OfertaSandwiches[i].Nombre" type="hidden" class="form-control" />
+                                    <input asp-for="OfertaSandwiches[i].Ingredientes" type="hidden" class="form-control" />
+                                    <input asp-for="OfertaSandwiches[i].IngM" type="hidden" class="form-control" />
+                                    <input asp-for="OfertaSandwiches[i].Porcentaje" id="Porcentaje_@Model.OfertaSandwiches[i].Nombre" class="form-control"/>
+                                    <span asp-validation-for="OfertaSandwiches[i].Porcentaje" class="text-danger" />
+
+                                </div>
+
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <p></p>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" id="CreateButton" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
+
